@@ -7,6 +7,8 @@
     <title>Django Auth</title>
 </head>
 <body>
+    
+    <!--Navbar-->
     <nav>
         <ul>
             <li>
@@ -22,6 +24,18 @@
                 <a href="#">Profile</a>
             </li>
         </ul>
+        
+        <hr>
+        
+        <!--Flash messages-->
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
     </nav>
 </body>
 </html>
