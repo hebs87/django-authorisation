@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <h1>Home</h1>
+    <h1>User Login</h1>
     
     <!--Navbar-->
     <nav>
@@ -37,6 +37,12 @@
                 {% endfor %}
             </div>
         {% endif %}
+        
+        <!--Login form-->
+        <form method="POST">
+            {% csrf_token %}
+            {{ login_form }}
+        </form>
         
     </nav>
 </body>
