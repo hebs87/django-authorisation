@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from accounts.views import index
+from accounts.views import index, logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', index)
+    url(r'^$', index, name="index"),
+    # Name allows the url in the HTML template to route to the logout url
+    url(r'^accounts/logout/$', logout, name="logout")
 ]
