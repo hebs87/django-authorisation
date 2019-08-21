@@ -67,6 +67,33 @@ def registration(request):
     '''
     Render the registration page
     '''
-    registration_form = UserRegistrationForm()
+    # Ensures that user redirected to index if accessing login,
+    # when already logged in
+    if request.user.is_authenticated():
+        return redirect(reverse('index'))
+
+    if request.method == "POST":
+        registration_form = UserRegistrationForm(request.POST)
+
+        if registration_form.is_valid():
+            # If form is valid, save user's
+            registration_form.save()
+
+            # Authenicate user, save details against relevant field
+            user = auth.authenticate(username=request.POST['username'],
+                                     password=request.POST['password1'])
+            
+            # Log user in if all checks out
+            if user:
+                auth.login(user=user, request=request)
+                messages.success(request, 'You have successfully registered!')
+                return redirect(reverse('index'))
+            else:
+                messages.error(request, 'Unable to register your account at \
+                               this time!')
+
+    else:
+        registration_form = UserRegistrationForm()
+
     return render(request, "registration.html",
                   {'registration_form': registration_form})
