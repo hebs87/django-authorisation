@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import auth, messages
-from accounts.forms import UserLoginForm
 # To prevent users from getting to unwanted pages when logged out
 from django.contrib.auth.decorators import login_required
+from accounts.forms import UserLoginForm, UserRegistrationForm
 
 # Create your views here.
 def index(request):
@@ -67,4 +67,6 @@ def registration(request):
     '''
     Render the registration page
     '''
-    return render(request, "registration.html")
+    registration_form = UserRegistrationForm()
+    return render(request, "registration.html",
+                  {'registration_form': registration_form})
