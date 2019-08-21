@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import auth, messages
+from django.contrib.auth.models import User
 # To prevent users from getting to unwanted pages when logged out
 from django.contrib.auth.decorators import login_required
 from accounts.forms import UserLoginForm, UserRegistrationForm
@@ -97,3 +98,14 @@ def registration(request):
 
     return render(request, "registration.html",
                   {'registration_form': registration_form})
+
+
+@login_required
+def user_profile(request):
+    '''
+    The user's profile page
+    '''
+    # Gets user info for whichever email stored in request object
+    user = User.objects.get(email=request.user.email)
+    # Dict key will be profile and value will be user
+    return render(request, 'profile.html', {'profile': user})
