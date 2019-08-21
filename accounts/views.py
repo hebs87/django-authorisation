@@ -25,6 +25,27 @@ def login(request):
     '''
     Return a login page
     '''
-    # Create instance of the login form
-    login_form = UserLoginForm()
+    # If request method is POST, we want to validate login details
+    if request.method == "POST":
+        # Create an instance of login form and pass POST request as constructor
+        login_form = UserLoginForm(request.POST)
+        
+        if login_form.is_valid():
+            # If form is valid, we get both entered username and password
+            user = auth.authenticate(username=request.POST['username'],
+                                     password=request.POST['password'])
+            
+            if user:
+                # If details are valid, log user in and display message
+                auth.login(user=user, request=request)
+                messages.success(request, 'You have successfully logged in!')
+            else:
+                # If details don't match, display error message
+                login_form.add_error(None, 'Your username or password is \
+                                     incorrect!')
+
+    else:
+        # Else, we want to return a blank form
+        login_form = UserLoginForm()
+
     return render(request, "login.html", {"login_form": login_form})
