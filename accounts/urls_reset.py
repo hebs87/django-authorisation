@@ -18,5 +18,5 @@ urlpatterns = [
         {'post_reset_confirm': reverse_lazy('password_reset_complete')},
         name='password_reset_confirm'),
     url(r'^complete/$', password_reset_complete,
-        name='password_reset_completes')
+        name='password_reset_complete')
 ]

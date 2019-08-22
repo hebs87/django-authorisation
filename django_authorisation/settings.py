@@ -20,11 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# ------------------------------ EDITED ------------------------------
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ------------------------------ EDITED ------------------------------
 ALLOWED_HOSTS = [os.environ.get('C9_HOSTNAME')]
 
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # ------------------------------ EDITED ------------------------------
     'accounts'
 ]
 
@@ -55,6 +58,7 @@ ROOT_URLCONF = 'django_authorisation.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # ------------------------------ EDITED ------------------------------
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -120,4 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# ------------------------------ ADDED ------------------------------
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+
+# ------------------------------ ADDED ------------------------------
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
