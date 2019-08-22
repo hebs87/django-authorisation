@@ -15,7 +15,7 @@ urlpatterns = [
     # password_reset_confirm is the url that is normally sent in an email
     # The link then redirects to the post_reset_confirm view
     url(r'^(?P<uidb64>[0-9A-za-z]+)-(?P<token>.+)/$', password_reset_confirm,
-        {'post_reset_confirm': reverse_lazy('password_reset_complete')},
+        {'post_reset_redirect': reverse_lazy('password_reset_complete')},
         name='password_reset_confirm'),
     url(r'^complete/$', password_reset_complete,
         name='password_reset_complete')
