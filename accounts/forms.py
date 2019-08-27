@@ -27,7 +27,7 @@ class UserRegistrationForm(UserCreationForm):
     # Create inner class to give more info about fomr - model and fields
     class Meta:
         model = User
-        fields = ['email', 'username', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
 
 
     # clean_ validates field and returns clean data which we can verify

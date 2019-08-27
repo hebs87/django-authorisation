@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import auth, messages
-from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.template.context_processors import csrf
 # To prevent users from getting to unwanted pages when logged out
 from django.contrib.auth.decorators import login_required
-from accounts.forms import UserLoginForm, UserRegistrationForm
+from .forms import UserLoginForm, UserRegistrationForm
 
 # Create your views here.
 def index(request):
@@ -22,7 +23,7 @@ def logout(request):
     '''
     auth.logout(request)
     # Display a flash message when user is logged out
-    messages.success(request, "You have successfully been logged out!")
+    messages.success(request, "You have successfully been logged out")
     # Reverse allows to redirect to url name rather than html file or function
     return redirect(reverse('index'))
 
@@ -48,10 +49,14 @@ def login(request):
             
             if user:
                 # If details are valid, log user in and display message
-                auth.login(user=user, request=request)
+                auth.login(request, user)
                 messages.success(request, 'You have successfully logged in!')
                 # Redirect user to home page once logged in
-                return redirect(reverse('index'))
+                if request.GET and request.GET['next'] !='':
+                    next = request.GET['next']
+                    return HttpResponseRedirect(next)
+                else:
+                    return redirect(reverse('index'))
             else:
                 # If details don't match, display error message
                 login_form.add_error(None, 'Your username or password is \
@@ -60,8 +65,18 @@ def login(request):
     else:
         # Else, we want to return a blank form
         login_form = UserLoginForm()
+    
+    args = {'login_form': login_form, 'next': request.GET.get('next', '')}
 
-    return render(request, "login.html", {"login_form": login_form})
+    return render(request, "login.html", args)
+
+
+@login_required
+def user_profile(request):
+    '''
+    The user's profile page
+    '''
+    return render(request, 'profile.html')
 
 
 def registration(request):
@@ -86,7 +101,7 @@ def registration(request):
             
             # Log user in if all checks out
             if user:
-                auth.login(user=user, request=request)
+                auth.login(request, user)
                 messages.success(request, 'You have successfully registered!')
                 return redirect(reverse('index'))
             else:
@@ -96,16 +111,6 @@ def registration(request):
     else:
         registration_form = UserRegistrationForm()
 
-    return render(request, "registration.html",
-                  {'registration_form': registration_form})
+    args = {'registration_form': registration_form}
 
-
-@login_required
-def user_profile(request):
-    '''
-    The user's profile page
-    '''
-    # Gets user info for whichever email stored in request object
-    user = User.objects.get(email=request.user.email)
-    # Dict key will be profile and value will be user
-    return render(request, 'profile.html', {'profile': user})
+    return render(request, "registration.html", args)

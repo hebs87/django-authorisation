@@ -4,10 +4,10 @@ from accounts import urls_reset
 
 
 urlpatterns = [
-    url(r'^logout/$', logout, name="logout"),
-    url(r'^login/$', login, name="login"),
     url(r'^register/$', registration, name="registration"),
     url(r'^profile/$', user_profile, name="profile"),
-    # Use include to includ the password reset urls
+    url(r'^logout/$', logout, name="logout"),
+    url(r'^login/$', login, name="login"),
+    # Use include to include the password reset urls
     url(r'^password-reset/', include(urls_reset))
 ]
